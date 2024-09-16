@@ -38,9 +38,9 @@ export function Login() {
               <HeadphonesIcon className="h-8 w-8 text-sky-500 mr-2" />
               <h2 className="text-2xl font-bold text-gray-800">Iniciar Sesión</h2>
             </div>
-            <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700">
-              <XIcon className="h-6 w-6" />
-            </Button>
+            <Link href="/">
+              <XIcon className="h-8 w-8 text-sky-500 mr-2" />
+            </Link>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
