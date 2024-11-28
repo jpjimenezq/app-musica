@@ -1,25 +1,27 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { HeadphonesIcon, XIcon } from "lucide-react"
-import Link from "next/link"
+import React, { useState } from "react";
+import { signIn } from "next-auth/react"; // Importar signIn de next-auth
+import { Button } from "@/components/ui/button";
+import { HeadphonesIcon, XIcon } from "lucide-react";
+import Link from "next/link";
+import Image from 'next/image'
 
 export function Login() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
+    email: "",
+    password: "",
+  });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => { // Eliminar la anotación de tipo
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Aquí iría la lógica para enviar los datos del formulario
-    console.log(formData)
-  }
+  const handleSubmit = (e) => { // Eliminar la anotación de tipo
+    e.preventDefault();
+    console.log(formData);
+    // Aquí podrías manejar la lógica de inicio de sesión manual si lo necesitas
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-navy-900 text-gray-800 relative overflow-hidden">
@@ -44,7 +46,9 @@ export function Login() {
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -56,7 +60,9 @@ export function Login() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
               <input
                 type="password"
                 id="password"
@@ -72,12 +78,30 @@ export function Login() {
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-gray-600">
-            ¿No tienes una cuenta? <Link href="/registro" className="font-medium text-sky-600 hover:text-sky-500">Regístrate</Link>
+            ¿No tienes una cuenta?{" "}
+            <Link href="/registro" className="font-medium text-sky-600 hover:text-sky-500">
+              Regístrate
+            </Link>
           </p>
+          <div className="mt-6">
+            <button
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-800 hover:bg-gray-100"
+            >
+              <Image
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png"
+                alt="Google"
+                className="h-6 w-6 mr-2"
+                width={40}
+                height={40}
+              />
+              Iniciar sesión con Google
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

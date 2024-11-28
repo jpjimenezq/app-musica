@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from 'next/image'
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import {
   HeadphonesIcon,
   BarChartIcon,
@@ -12,10 +12,16 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  LogOut,
 } from "lucide-react";
+import { signIn, useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
 export function MusicTrainingLandingComponent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { data: session } = useSession();
+  console.log(session);
 
   return (
     <div className="min-h-screen flex flex-col bg-navy-900 text-gray-800 relative overflow-hidden">
@@ -37,23 +43,21 @@ export function MusicTrainingLandingComponent() {
               </a>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  <a
-                    href="#"
-                    className="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Inicio
-                  </a>
+                  {session?.user ? (
+                    <a
+                      href="/dashboard"
+                      className="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      Dashboard
+                    </a>
+                  ) : (
+                    <></>
+                  )}
                   <a
                     href="#"
                     className="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Características
-                  </a>
-                  <a
-                    href="#"
-                    className="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Precios
                   </a>
                   <a
                     href="#"
@@ -65,23 +69,44 @@ export function MusicTrainingLandingComponent() {
               </div>
             </div>
             <div className="hidden md:flex md:items-center md:space-x-2">
-              <Link href="/registro">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="text-sky-500 border-sky-500 hover:bg-sky-100 hover:text-sky-600"
-                >
-                  Registrar
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button
-                  size="sm"
-                  className="bg-sky-500 hover:bg-sky-600 text-white"
-                >
-                  Iniciar sesión
-                </Button>
-              </Link>
+              {session?.user ? (
+                <>
+                  <p>{session.user.name}</p>
+                  {session.user.image && (
+                    <Image
+                      src={session.user.image}
+                      alt="User profile"
+                      className="w-10 h-10 rounded-full cursor-pointer"
+                      width={40}
+                      height={40}
+                    />
+                  )}
+                  <Button
+                    size="sm"
+                    className="bg-sky-500 hover:bg-sky-600 text-white"
+                    onClick={() => signOut()}
+                  >
+                    Salir
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-sky-500 border-sky-500 hover:bg-sky-100 hover:text-sky-600"
+                  >
+                    Registrar
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-sky-500 hover:bg-sky-600 text-white"
+                    onClick={() => signIn()}
+                  >
+                    Iniciar sesión
+                  </Button>
+                </>
+              )}
             </div>
             <div className="-mr-2 flex md:hidden">
               <button
@@ -159,12 +184,21 @@ export function MusicTrainingLandingComponent() {
             Desarrolla tu habilidad auditiva con ejercicios interactivos y
             seguimiento de progreso personalizado
           </p>
-          <Button
-            size="lg"
-            className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
-          >
-            Comienza Gratis
-          </Button>
+          {session?.user ? (
+            <Link href="/dashboard">
+              <Button
+                className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"            >
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              size="lg"
+              className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
+            >
+              Comienza Gratis
+            </Button>
+          )}
         </div>
 
         {/* Características */}
